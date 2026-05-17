@@ -1,12 +1,14 @@
-import { BrowserRouter } from 'react-router-dom'
-import { AppRoutes } from './routes'
-import { Toaster } from './sonner'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import ReportPage from './pages/ReportPage'
 
 function App() {
   return (
     <BrowserRouter>
-      <AppRoutes />
-      <Toaster position="top-center" richColors closeButton />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/report" element={<ReportPage />} />
+      </Routes>
     </BrowserRouter>
   )
 }
