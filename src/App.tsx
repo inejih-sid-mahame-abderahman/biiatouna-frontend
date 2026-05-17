@@ -3,24 +3,22 @@ import HomePage from './pages/HomePage'
 import ReportPage from './pages/ReportPage'
 import SuccessPage from './pages/SuccessPage'
 import AdminLayout from './layouts/AdminLayout'
+import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
 import AdminReportsPage from './pages/AdminReportsPage'
 import AdminAnalysisPage from './pages/AdminAnalysisPage'
 import AdminHeatmapPage from './pages/AdminHeatmapPage'
 import AdminStatisticsPage from './pages/AdminStatisticsPage'
 import AdminUsersPage from './pages/AdminUsersPage'
-import LoginForm from './components/loginform'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/report" element={<ReportPage />} />
         <Route path="/success" element={<SuccessPage />} />
-        
-        {/* Admin Routes with Layout */}
+        <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route element={<AdminLayout />}>
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
           <Route path="/admin/reports" element={<AdminReportsPage />} />
@@ -28,7 +26,6 @@ function App() {
           <Route path="/admin/heatmap" element={<AdminHeatmapPage />} />
           <Route path="/admin/statistics" element={<AdminStatisticsPage />} />
           <Route path="/admin/users" element={<AdminUsersPage />} />
-                 <Route path="/login" element={<LoginForm />} />
         </Route>
       </Routes>
     </BrowserRouter>
