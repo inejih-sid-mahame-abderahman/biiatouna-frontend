@@ -102,6 +102,12 @@ export default function HomePage() {
           </div>
           <div className="flex items-center gap-3">
             <button
+              onClick={() => navigate('/login')}
+              className="bg-white text-gray-700 px-5 py-2.5 rounded-xl font-semibold border border-gray-200 hover:border-green-400 hover:text-green-600 transition-all duration-200 text-sm"
+            >
+              تسجيل الدخول
+            </button>
+            <button
               onClick={() => navigate('/report')}
               className="bg-gradient-to-l from-green-500 to-teal-500 text-white px-5 py-2.5 rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all duration-200 text-sm"
             >

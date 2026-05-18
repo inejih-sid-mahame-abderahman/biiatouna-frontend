@@ -32,4 +32,12 @@
 - **React Hook Form** + **Zod** - Forms & Validation
 - **Axios** - HTTP Client
 
+### 🔐 متغيرات البيئة
+
+الواجهة الأمامية تعتمد على متغير بيئة واحد:
+
+- `VITE_API_BASE_URL` عنوان الـ backend
+
+في بيئة التطوير المحلية يمكن وضعهما في ملف `.env.local`.
+
 ### 📁 هيكلة المشروع
