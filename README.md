@@ -1,7 +1,7 @@
 # بيئتنا - منصة بيئية ذكية لموريتانيا
 
 <p align="center">
-  <img src="https://via.placeholder.com/800x200/22c55e/ffffff?text=بيئتنا" alt="بيئتنا Logo"/>
+  <img src="https://res.cloudinary.com/dobbzalqp/image/upload/v1795785231/dlrqmhjo3yvyiiqegar7.jpg" alt="بيئتنا Logo"/>
 </p>
 
 ## معًا من أجل موريتانيا أنظف 🌍
