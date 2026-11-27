@@ -1,14 +1,989 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="بيئتنا - منصة بيئية ذكية لموريتانيا. معًا من أجل موريتانيا أنظف" />
-    <title>بيئتنا - منصة بيئية ذكية</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+
+import { useState } from "react";
+
+const HERO_IMAGE =
+  "https://res.cloudinary.com/dobbzalqp/image/upload/v1795785231/dlrqmhjo3yvyiiqegar7.jpg";
+
+const features = [
+  {
+    icon: "📍",
+    title: "الإبلاغ عن مشكلة بيئية",
+    description:
+      "ساعدنا في تحديد أماكن تراكم النفايات والمشكلات البيئية في منطقتك.",
+    action: "قدّم بلاغًا",
+    target: "report",
+  },
+  {
+    icon: "♻️",
+    title: "إعادة التدوير",
+    description:
+      "تعرّف على طرق فرز النفايات وإعادة استخدامها للمساهمة في بيئة أنظف.",
+    action: "اكتشف المزيد",
+    target: "recycling",
+  },
+  {
+    icon: "🌱",
+    title: "التوعية البيئية",
+    description:
+      "اكتسب عادات يومية بسيطة تساعد في حماية الطبيعة والموارد.",
+    action: "ابدأ التعلّم",
+    target: "awareness",
+  },
+];
+
+export default function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [reportType, setReportType] = useState("تراكم النفايات");
+  const [location, setLocation] = useState("");
+  const [details, setDetails] = useState("");
+  const [notice, setNotice] = useState("");
+
+  function goTo(id: string) {
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    setMenuOpen(false);
+  }
+
+  function submitReport(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setNotice(
+      "تم تجهيز بيانات البلاغ. يلزم ربط المنصة بخادم لحفظ البلاغات وإرسالها للجهة المختصة."
+    );
+  }
+
+  return (
+    <div className="environment-app" dir="rtl" lang="ar">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+
+        :root {
+          font-family: 'Cairo', Tahoma, Arial, sans-serif;
+          color: #173b2b;
+          background: #ffffff;
+          font-synthesis: none;
+          text-rendering: optimizeLegibility;
+          scroll-behavior: smooth;
+        }
+
+        * { box-sizing: border-box; }
+        body { margin: 0; min-width: 320px; }
+        button, input, textarea, select { font: inherit; }
+        button, a { -webkit-tap-highlight-color: transparent; }
+        a { color: inherit; text-decoration: none; }
+        button { cursor: pointer; }
+        section { scroll-margin-top: 90px; }
+
+        .environment-app {
+          --green: #187747;
+          --dark: #103c2b;
+          --mint: #eaf6ee;
+          --muted: #65776c;
+          overflow: hidden;
+          background: white;
+        }
+
+        .container {
+          width: min(1160px, calc(100% - 40px));
+          margin-inline: auto;
+        }
+
+        .topbar {
+          background: #103c2b;
+          color: #e6f5e9;
+          padding: 9px 0;
+          font-size: 12px;
+        }
+
+        .topbar-inner {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+        }
+
+        .header {
+          position: sticky;
+          top: 0;
+          z-index: 20;
+          background: rgba(255,255,255,.96);
+          border-bottom: 1px solid #e8eee9;
+          backdrop-filter: blur(12px);
+        }
+
+        .nav {
+          min-height: 76px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 22px;
+        }
+
+        .brand {
+          display: flex;
+          align-items: center;
+          gap: 11px;
+          flex-shrink: 0;
+        }
+
+        .brand-icon {
+          width: 45px;
+          height: 45px;
+          display: grid;
+          place-items: center;
+          border-radius: 15px;
+          color: white;
+          font-size: 25px;
+          background: linear-gradient(145deg, #22945a, #0e633b);
+          box-shadow: 0 6px 15px #18774725;
+        }
+
+        .brand-name { font-size: 21px; font-weight: 900; line-height: 1.3; }
+        .brand-caption { font-size: 10px; color: #718276; }
+
+        .nav-links {
+          display: flex;
+          align-items: center;
+          gap: 27px;
+          color: #455b4c;
+          font-size: 13px;
+          font-weight: 700;
+        }
+
+        .nav-links a:hover { color: var(--green); }
+
+        .button {
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 20px;
+          border: 1px solid transparent;
+          border-radius: 12px;
+          font-weight: 800;
+          font-size: 13px;
+          transition: transform .2s, background .2s;
+        }
+
+        .button:hover { transform: translateY(-2px); }
+        .button-primary { background: var(--green); color: white; }
+        .button-primary:hover { background: #105e37; }
+        .button-light { background: white; color: var(--dark); }
+        .button-outline { border-color: #d6e5d9; color: var(--dark); background: white; }
+        .menu-button { display: none; }
+
+        .hero {
+          position: relative;
+          padding: 65px 0 72px;
+          background:
+            radial-gradient(ellipse at 5% 5%, #dff4e5 0, transparent 37%),
+            linear-gradient(135deg, #f8fcf8 0%, #edf7ee 100%);
+        }
+
+        .hero-grid {
+          display: grid;
+          grid-template-columns: 1.02fr .98fr;
+          align-items: center;
+          gap: 52px;
+        }
+
+        .eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 7px 13px;
+          border-radius: 100px;
+          color: #176c40;
+          background: #dff1e4;
+          font-size: 12px;
+          font-weight: 800;
+        }
+
+        .hero h1 {
+          margin: 20px 0 18px;
+          max-width: 610px;
+          color: var(--dark);
+          font-size: clamp(36px, 4.4vw, 57px);
+          font-weight: 900;
+          line-height: 1.55;
+          letter-spacing: -.8px;
+        }
+
+        .hero h1 span { color: #21935a; }
+
+        .hero-description {
+          max-width: 520px;
+          color: #62766a;
+          font-size: 15px;
+          line-height: 2.2;
+        }
+
+        .hero-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          margin-top: 28px;
+        }
+
+        .hero-note {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+          margin-top: 23px;
+          color: #62776a;
+          font-size: 12px;
+        }
+
+        .hero-visual {
+          position: relative;
+          min-width: 0;
+        }
+
+        .hero-image {
+          display: block;
+          width: 100%;
+          height: 420px;
+          object-fit: cover;
+          border-radius: 30px;
+          box-shadow: 0 25px 70px #154c2b20;
+          background: #d9eadc;
+        }
+
+        .image-label {
+          position: absolute;
+          right: 18px;
+          bottom: 18px;
+          left: 18px;
+          display: flex;
+          align-items: center;
+          gap: 13px;
+          padding: 15px;
+          border: 1px solid #ffffff70;
+          border-radius: 17px;
+          background: #ffffffeb;
+          backdrop-filter: blur(10px);
+        }
+
+        .label-icon {
+          display: grid;
+          place-items: center;
+          width: 43px;
+          height: 43px;
+          border-radius: 13px;
+          background: #e0f3e5;
+          font-size: 22px;
+          flex-shrink: 0;
+        }
+
+        .image-label strong { display: block; font-size: 13px; }
+        .image-label small { color: var(--muted); font-size: 11px; }
+
+        .section { padding: 82px 0; }
+        .section-soft { background: #f6faf6; }
+
+        .section-heading {
+          max-width: 650px;
+          margin: 0 auto 38px;
+          text-align: center;
+        }
+
+        .section-heading h2 {
+          margin: 12px 0;
+          color: var(--dark);
+          font-size: clamp(26px, 3vw, 36px);
+          font-weight: 900;
+        }
+
+        .section-heading p {
+          color: var(--muted);
+          font-size: 14px;
+          line-height: 2;
+        }
+
+        .cards {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 20px;
+        }
+
+        .feature-card {
+          padding: 27px;
+          border: 1px solid #e5eee6;
+          border-radius: 20px;
+          background: white;
+          transition: transform .2s, box-shadow .2s;
+        }
+
+        .feature-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 15px 40px #173b2b0d;
+        }
+
+        .feature-icon {
+          display: grid;
+          place-items: center;
+          width: 57px;
+          height: 57px;
+          margin-bottom: 20px;
+          border-radius: 17px;
+          background: #e9f6ec;
+          font-size: 27px;
+        }
+
+        .feature-card h3 { margin: 0 0 11px; font-size: 18px; }
+        .feature-card p {
+          min-height: 68px;
+          color: var(--muted);
+          font-size: 13px;
+          line-height: 2;
+        }
+
+        .text-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          margin-top: 10px;
+          padding: 0;
+          border: 0;
+          color: var(--green);
+          background: transparent;
+          font-weight: 800;
+          font-size: 13px;
+        }
+
+        .mission-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          align-items: center;
+          gap: 54px;
+        }
+
+        .mission-image {
+          width: 100%;
+          height: 355px;
+          object-fit: cover;
+          border-radius: 25px;
+          background: #e2eee4;
+        }
+
+        .mission-copy h2 {
+          margin: 14px 0;
+          font-size: clamp(26px, 3vw, 36px);
+          line-height: 1.6;
+        }
+
+        .mission-copy > p {
+          color: var(--muted);
+          line-height: 2.2;
+          font-size: 14px;
+        }
+
+        .check-list {
+          display: grid;
+          gap: 15px;
+          margin-top: 25px;
+        }
+
+        .check-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          color: #355644;
+          font-size: 13px;
+          line-height: 1.9;
+        }
+
+        .check {
+          display: grid;
+          place-items: center;
+          width: 25px;
+          height: 25px;
+          flex-shrink: 0;
+          border-radius: 50%;
+          color: #187747;
+          background: #e0f2e5;
+          font-weight: 900;
+        }
+
+        .report-layout {
+          display: grid;
+          grid-template-columns: .8fr 1.2fr;
+          align-items: start;
+          gap: 35px;
+        }
+
+        .report-intro {
+          padding: 27px;
+          border-radius: 23px;
+          color: white;
+          background: linear-gradient(145deg, #155c38, #103c2b);
+        }
+
+        .report-intro .big-icon { font-size: 38px; }
+        .report-intro h3 { margin: 15px 0; font-size: 24px; }
+        .report-intro p { color: #d7eadc; font-size: 13px; line-height: 2.1; }
+        .report-intro .mini-note {
+          margin-top: 22px;
+          padding-top: 18px;
+          border-top: 1px solid #ffffff25;
+          color: #c6e4d0;
+          font-size: 11px;
+          line-height: 2;
+        }
+
+        .report-form {
+          padding: 28px;
+          border: 1px solid #e3ece5;
+          border-radius: 23px;
+          background: white;
+          box-shadow: 0 12px 45px #173b2b08;
+        }
+
+        .report-form h3 { margin: 0 0 7px; font-size: 20px; }
+        .form-subtitle { margin: 0 0 24px; color: var(--muted); font-size: 12px; }
+
+        .form-field { display: grid; gap: 8px; margin-bottom: 18px; }
+        .form-field label { font-size: 12px; font-weight: 800; }
+
+        .form-field input, .form-field select, .form-field textarea {
+          width: 100%;
+          min-width: 0;
+          padding: 13px 14px;
+          border: 1px solid #dfe8e0;
+          border-radius: 11px;
+          outline: none;
+          color: var(--dark);
+          background: #fbfdfb;
+          font-size: 13px;
+        }
+
+        .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+          border-color: #48a36c;
+          box-shadow: 0 0 0 3px #18774712;
+        }
+
+        .form-field textarea { resize: vertical; min-height: 100px; }
+        .report-form .button { width: 100%; }
+
+        .notice {
+          margin-top: 15px;
+          padding: 13px;
+          border-radius: 10px;
+          color: #225b38;
+          background: #e7f6eb;
+          font-size: 12px;
+          line-height: 1.9;
+        }
+
+        .awareness-banner {
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 25px;
+          padding: 40px;
+          border-radius: 26px;
+          color: white;
+          background: linear-gradient(110deg, #0e432d, #1b7747);
+        }
+
+        .awareness-banner h2 { margin: 0 0 10px; font-size: clamp(23px, 3vw, 32px); }
+        .awareness-banner p { margin: 0; color: #d9efe0; font-size: 13px; line-height: 2; }
+        .awareness-symbol { font-size: 72px; opacity: .9; flex-shrink: 0; }
+
+        .footer {
+          padding: 45px 0 20px;
+          color: #d8e7dc;
+          background: #0b3022;
+        }
+
+        .footer-grid {
+          display: grid;
+          grid-template-columns: 1.3fr .7fr .7fr;
+          gap: 35px;
+          padding-bottom: 35px;
+        }
+
+        .footer .brand-name { color: white; }
+        .footer .brand-caption { color: #b4d1bd; }
+        .footer-description {
+          max-width: 340px;
+          margin-top: 15px;
+          color: #b4cbb9;
+          font-size: 12px;
+          line-height: 2.1;
+        }
+
+        .footer h4 { margin: 0 0 15px; color: white; font-size: 13px; }
+        .footer-links { display: grid; gap: 11px; }
+        .footer-links button {
+          width: fit-content;
+          padding: 0;
+          border: 0;
+          color: #b4cbb9;
+          background: transparent;
+          font-size: 12px;
+          text-align: right;
+        }
+
+        .footer-links button:hover { color: white; }
+        .copyright {
+          padding-top: 18px;
+          border-top: 1px solid #ffffff20;
+          color: #a9c2af;
+          font-size: 11px;
+          text-align: center;
+        }
+
+        @media (max-width: 900px) {
+          .nav-links { gap: 14px; font-size: 12px; }
+          .nav > .button { padding: 10px 13px; }
+          .hero-grid { gap: 30px; }
+          .hero-image { height: 360px; }
+          .mission-grid { gap: 30px; }
+        }
+
+        @media (max-width: 700px) {
+          .container { width: min(100% - 30px, 540px); }
+          .topbar-inner { justify-content: center; text-align: center; }
+          .topbar-inner span:last-child { display: none; }
+          .nav { min-height: 68px; }
+          .brand-name { font-size: 18px; }
+          .brand-icon { width: 40px; height: 40px; }
+          .menu-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border: 1px solid #e0eae2;
+            border-radius: 11px;
+            color: var(--dark);
+            background: white;
+            font-size: 23px;
+          }
+
+          .nav-links {
+            position: absolute;
+            top: 68px;
+            right: 0;
+            left: 0;
+            display: none;
+            align-items: stretch;
+            gap: 0;
+            padding: 12px 20px 18px;
+            border-bottom: 1px solid #e6eee7;
+            background: white;
+          }
+
+          .nav-links.open { display: flex; flex-direction: column; }
+          .nav-links a { padding: 12px 4px; }
+          .nav > .button { display: none; }
+          .hero { padding: 43px 0 48px; }
+          .hero-grid, .mission-grid, .report-layout { grid-template-columns: 1fr; }
+          .hero-grid { gap: 30px; }
+          .hero h1 { font-size: 37px; }
+          .hero-description { font-size: 14px; }
+          .hero-image { height: 300px; border-radius: 22px; }
+          .section { padding: 58px 0; }
+          .cards { grid-template-columns: 1fr; gap: 14px; }
+          .feature-card { padding: 23px; }
+          .feature-card p { min-height: auto; }
+          .mission-image { height: 280px; }
+          .report-layout { gap: 18px; }
+          .report-form { padding: 22px; }
+          .awareness-banner { padding: 27px; }
+          .awareness-symbol { font-size: 46px; }
+          .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px 20px; }
+          .footer-about { grid-column: 1 / -1; }
+        }
+
+        @media (max-width: 390px) {
+          .hero h1 { font-size: 32px; }
+          .hero-actions .button { width: 100%; }
+          .awareness-banner { align-items: flex-start; padding: 22px; }
+          .awareness-symbol { font-size: 35px; }
+          .footer-grid { grid-template-columns: 1fr; }
+          .footer-about { grid-column: auto; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+            scroll-behavior: auto !important;
+            transition: none !important;
+          }
+        }
+      `}</style>
+
+      <div className="topbar">
+        <div className="container topbar-inner">
+          <span>🌿 معًا من أجل بيئة أفضل في موريتانيا</span>
+          <span>بيئتنا مسؤولية الجميع 🇲🇷</span>
+        </div>
+      </div>
+
+      <header className="header">
+        <div className="container nav">
+          <a className="brand" href="#home" aria-label="بيئتنا - الرئيسية">
+            <span className="brand-icon">🌿</span>
+            <span>
+              <span className="brand-name">بيئتنا</span>
+              <span className="brand-caption" style={{ display: "block" }}>
+                نحو موريتانيا أكثر نظافة
+              </span>
+            </span>
+          </a>
+
+          <nav className={`nav-links ${menuOpen ? "open" : ""}`}>
+            <a href="#home" onClick={() => setMenuOpen(false)}>الرئيسية</a>
+            <a href="#services" onClick={() => setMenuOpen(false)}>خدماتنا</a>
+            <a href="#about" onClick={() => setMenuOpen(false)}>عن المنصة</a>
+            <a href="#report" onClick={() => setMenuOpen(false)}>الإبلاغ البيئي</a>
+          </nav>
+
+          <button className="button button-primary" onClick={() => goTo("report")}>
+            <span>＋</span> أبلغ عن مشكلة
+          </button>
+
+          <button
+            className="menu-button"
+            aria-label="فتح القائمة"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? "×" : "☰"}
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section className="hero" id="home">
+          <div className="container hero-grid">
+            <div>
+              <span className="eyebrow">
+                <span>🌍</span> منصة بيئية رقمية لموريتانيا
+              </span>
+
+              <h1>
+                بيئة أنظف،
+                <br />
+                <span>مستقبل أفضل</span>
+                <br />
+                لأجيالنا القادمة
+              </h1>
+
+              <p className="hero-description">
+                بيئتنا منصة تهدف إلى نشر الوعي البيئي وتشجيع المبادرات
+                المجتمعية للمحافظة على نظافة مدننا، وحماية مواردنا الطبيعية،
+                وبناء مستقبل أكثر استدامة في موريتانيا.
+              </p>
+
+              <div className="hero-actions">
+                <button
+                  className="button button-primary"
+                  onClick={() => goTo("report")}
+                >
+                  📍 أبلغ عن مشكلة بيئية
+                </button>
+                <button
+                  className="button button-outline"
+                  onClick={() => goTo("services")}
+                >
+                  اكتشف خدماتنا ←
+                </button>
+              </div>
+
+              <div className="hero-note">
+                <span>🌱</span>
+                <span>كل خطوة صغيرة تصنع فرقًا كبيرًا.</span>
+              </div>
+            </div>
+
+            <div className="hero-visual">
+              <img
+                className="hero-image"
+                src={HERO_IMAGE}
+                alt="صورة بيئية لمنصة بيئتنا"
+                fetchPriority="high"
+              />
+              <div className="image-label">
+                <span className="label-icon">🌿</span>
+                <span>
+                  <strong>بيئتنا مسؤوليتنا المشتركة</strong>
+                  <small>نحو مجتمع أكثر وعيًا واهتمامًا بالبيئة</small>
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section" id="services">
+          <div className="container">
+            <div className="section-heading">
+              <span className="eyebrow">ماذا تقدم بيئتنا؟</span>
+              <h2>خطوات عملية نحو بيئة أفضل</h2>
+              <p>
+                اكتشف طرقًا للمشاركة في حماية البيئة والمساهمة في تحسين
+                المحيط الذي نعيش فيه.
+              </p>
+            </div>
+
+            <div className="cards">
+              {features.map((feature) => (
+                <article className="feature-card" key={feature.target}>
+                  <div className="feature-icon">{feature.icon}</div>
+                  <h3>{feature.title}</h3>
+                  <p>{feature.description}</p>
+                  <button
+                    className="text-link"
+                    onClick={() => goTo(feature.target)}
+                  >
+                    {feature.action} <span>←</span>
+                  </button>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section section-soft" id="about">
+          <div className="container mission-grid">
+            <img
+              className="mission-image"
+              src={HERO_IMAGE}
+              alt="الطبيعة والاهتمام بالبيئة"
+              loading="lazy"
+            />
+
+            <div className="mission-copy">
+              <span className="eyebrow">رؤيتنا ورسالتنا</span>
+              <h2>التغيير يبدأ من مجتمعنا</h2>
+              <p>
+                نؤمن بأن حماية البيئة ليست مسؤولية جهة واحدة، بل هي جهد
+                مشترك بين المواطنين والمؤسسات والمبادرات المحلية. تسعى
+                بيئتنا إلى جعل الوعي البيئي والعمل المجتمعي أكثر سهولة
+                وقربًا من الجميع.
+              </p>
+
+              <div className="check-list">
+                <div className="check-item">
+                  <span className="check">✓</span>
+                  <span>
+                    <strong>مجتمع واعٍ:</strong> تعزيز السلوكيات الإيجابية
+                    تجاه البيئة.
+                  </span>
+                </div>
+                <div className="check-item">
+                  <span className="check">✓</span>
+                  <span>
+                    <strong>مبادرات محلية:</strong> تشجيع المشاركة في تحسين
+                    الأحياء والمساحات العامة.
+                  </span>
+                </div>
+                <div className="check-item">
+                  <span className="check">✓</span>
+                  <span>
+                    <strong>مستقبل مستدام:</strong> نشر ثقافة تقليل النفايات
+                    وإعادة الاستخدام.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section" id="report">
+          <div className="container">
+            <div className="section-heading">
+              <span className="eyebrow">شارك في التغيير</span>
+              <h2>لاحظت مشكلة بيئية؟ أخبرنا</h2>
+              <p>
+                سجّل تفاصيل المشكلة لمساعدتك على تنظيم البلاغ. إرسال البلاغ
+                فعليًا إلى جهة مختصة يتطلب ربط المنصة بخادم.
+              </p>
+            </div>
+
+            <div className="report-layout">
+              <aside className="report-intro">
+                <div className="big-icon">📣</div>
+                <h3>صوتك يصنع الفرق</h3>
+                <p>
+                  ملاحظات المواطنين تساعد في التعرف على التحديات البيئية
+                  وتحديد الأولويات للمبادرات المجتمعية.
+                </p>
+                <div className="mini-note">
+                  🔒 لا تُدخل معلومات شخصية حساسة في وصف المشكلة.
+                  <br />
+                  ℹ️ هذه نسخة واجهة أولية وليست نظام بلاغات متصلًا بجهة رسمية.
+                </div>
+              </aside>
+
+              <form className="report-form" onSubmit={submitReport}>
+                <h3>نموذج بلاغ بيئي</h3>
+                <p className="form-subtitle">
+                  املأ الحقول التالية لوصف المشكلة التي لاحظتها.
+                </p>
+
+                <div className="form-field">
+                  <label htmlFor="reportType">نوع المشكلة</label>
+                  <select
+                    id="reportType"
+                    value={reportType}
+                    onChange={(event) => setReportType(event.target.value)}
+                  >
+                    <option>تراكم النفايات</option>
+                    <option>تلوث المياه</option>
+                    <option>تلوث الهواء</option>
+                    <option>إتلاف المساحات الخضراء</option>
+                    <option>مشكلة بيئية أخرى</option>
+                  </select>
+                </div>
+
+                <div className="form-field">
+                  <label htmlFor="location">الموقع أو الحي</label>
+                  <input
+                    id="location"
+                    value={location}
+                    onChange={(event) => setLocation(event.target.value)}
+                    placeholder="مثال: اسم الحي أو المنطقة"
+                    required
+                  />
+                </div>
+
+                <div className="form-field">
+                  <label htmlFor="details">وصف المشكلة</label>
+                  <textarea
+                    id="details"
+                    value={details}
+                    onChange={(event) => setDetails(event.target.value)}
+                    placeholder="صف المشكلة ومكانها وأثرها على المحيط..."
+                    required
+                  />
+                </div>
+
+                <button className="button button-primary" type="submit">
+                  تجهيز البلاغ ←
+                </button>
+
+                {notice && (
+                  <div className="notice" role="status">
+                    {notice}
+                  </div>
+                )}
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section className="section section-soft" id="recycling">
+          <div className="container">
+            <div className="section-heading">
+              <span className="eyebrow">عادات بسيطة، أثر مستمر</span>
+              <h2>ابدأ من حياتك اليومية</h2>
+              <p>
+                لا تحتاج حماية البيئة إلى خطوات معقدة. يمكن للعادات البسيطة
+                أن تساعد في تقليل النفايات والحفاظ على الموارد.
+              </p>
+            </div>
+
+            <div className="cards">
+              <article className="feature-card">
+                <div className="feature-icon">🛍️</div>
+                <h3>قلّل الاستخدام</h3>
+                <p>
+                  اختر المنتجات القابلة لإعادة الاستخدام وقلّل الاعتماد
+                  على المواد ذات الاستخدام الواحد.
+                </p>
+              </article>
+              <article className="feature-card">
+                <div className="feature-icon">♻️</div>
+                <h3>أعد الاستخدام</h3>
+                <p>
+                  امنح الأدوات والمواد القابلة للاستخدام عمرًا أطول قبل
+                  التخلص منها.
+                </p>
+              </article>
+              <article className="feature-card">
+                <div className="feature-icon">🧹</div>
+                <h3>حافظ على محيطك</h3>
+                <p>
+                  حافظ على نظافة الأماكن العامة وشارك في المبادرات
+                  المجتمعية المحلية.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section className="section" id="awareness">
+          <div className="container">
+            <div className="awareness-banner">
+              <div>
+                <h2>معًا نحو موريتانيا أنظف 🌱</h2>
+                <p>
+                  ابدأ بخطوة اليوم، وكن جزءًا من التغيير الإيجابي في مجتمعك.
+                </p>
+                <button
+                  className="button button-light"
+                  style={{ marginTop: 22 }}
+                  onClick={() => goTo("report")}
+                >
+                  شارك بملاحظتك البيئية
+                </button>
+              </div>
+              <div className="awareness-symbol" aria-hidden="true">🌍</div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="footer">
+        <div className="container">
+          <div className="footer-grid">
+            <div className="footer-about">
+              <a className="brand" href="#home">
+                <span className="brand-icon">🌿</span>
+                <span>
+                  <span className="brand-name">بيئتنا</span>
+                  <span className="brand-caption" style={{ display: "block" }}>
+                    نحو موريتانيا أكثر نظافة
+                  </span>
+                </span>
+              </a>
+              <p className="footer-description">
+                منصة توعوية تهدف إلى تشجيع المسؤولية البيئية والمشاركة
+                المجتمعية من أجل بيئة أفضل في موريتانيا.
+              </p>
+            </div>
+
+            <div>
+              <h4>روابط سريعة</h4>
+              <div className="footer-links">
+                <button onClick={() => goTo("home")}>الرئيسية</button>
+                <button onClick={() => goTo("services")}>خدماتنا</button>
+                <button onClick={() => goTo("about")}>عن المنصة</button>
+                <button onClick={() => goTo("report")}>الإبلاغ البيئي</button>
+              </div>
+            </div>
+
+            <div>
+              <h4>رسالتنا</h4>
+              <div className="footer-links">
+                <button onClick={() => goTo("recycling")}>إعادة الاستخدام</button>
+                <button onClick={() => goTo("awareness")}>التوعية البيئية</button>
+                <button onClick={() => goTo("report")}>المشاركة المجتمعية</button>
+              </div>
+            </div>
+          </div>
+
+          <div className="copyright">
+            © {new Date().getFullYear()} بيئتنا — منصة بيئية توعوية لموريتانيا.
+            جميع الحقوق محفوظة.
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
